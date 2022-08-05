@@ -1,14 +1,18 @@
 package io.github.drmanganese.endercrop.event;
 
 import io.github.drmanganese.endercrop.EnderCrop;
+import io.github.drmanganese.endercrop.Particle;
 import io.github.drmanganese.endercrop.compat.TOPCompatibility;
 import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.init.ModParticles;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -36,5 +40,10 @@ public final class FMLEventHandlers {
     public static void onEnqueueIMC(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
             TOPCompatibility.register();
+    }
+
+    @SubscribeEvent
+    public static void registerParticleFactories(final ParticleFactoryRegisterEvent event) {
+        Minecraft.getInstance().particleEngine.register(ModParticles.PARTICLE.get(), Particle.Provider::new);
     }
 }

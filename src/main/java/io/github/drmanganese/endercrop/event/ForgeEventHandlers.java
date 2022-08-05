@@ -26,8 +26,8 @@ public class ForgeEventHandlers {
 
     @SubscribeEvent
     public static void onBonemeal(BonemealEvent event) {
-        if (event.getBlock().is(ModBlocks.ENDER_CROP.get()))
-            event.setCanceled(true);
+        //if (event.getBlock().is(ModBlocks.ENDER_CROP.get()))
+        //    event.setCanceled(true);
     }
 
     @SubscribeEvent

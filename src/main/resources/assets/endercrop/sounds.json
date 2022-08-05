@@ -1,0 +1,8 @@
+{
+  "bonemeal_crit": {
+    "subtitle": "sounds.endercrop.bonemeal_crit",
+    "sounds": [
+      "endercrop:bonemeal_crit"
+    ]
+  }
+}
