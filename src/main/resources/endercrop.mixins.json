@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "io.github.drmanganese.endercrop.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "endercrop.refmap.json",
+  "mixins": [
+    "BonemealMixin"
+  ],
+  "client":[
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

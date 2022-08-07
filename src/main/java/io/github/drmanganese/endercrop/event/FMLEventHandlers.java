@@ -2,6 +2,7 @@ package io.github.drmanganese.endercrop.event;
 
 import io.github.drmanganese.endercrop.EnderCrop;
 import io.github.drmanganese.endercrop.Particle;
+import io.github.drmanganese.endercrop.ParticleDefault;
 import io.github.drmanganese.endercrop.compat.TOPCompatibility;
 import io.github.drmanganese.endercrop.init.ModBlocks;
 import io.github.drmanganese.endercrop.init.ModParticles;
@@ -45,5 +46,6 @@ public final class FMLEventHandlers {
     @SubscribeEvent
     public static void registerParticleFactories(final ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particleEngine.register(ModParticles.PARTICLE.get(), Particle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(ModParticles.PARTICLE_DEFAULT.get(), ParticleDefault.Provider::new);
     }
 }

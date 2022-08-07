@@ -51,7 +51,7 @@ public class EnderCropBlock extends CropBlock {
     public static final int FORSE_RERENDER = 8;
     public static final int FLAG_IGNORE_OBSERVERS = 16;
 
-    private void SendMsg(String text) {
+    public static void SendMsg(String text) {
         LocalPlayer player = Minecraft.getInstance().player;
         player.sendMessage(new TextComponent(text), player.getUUID());
     }

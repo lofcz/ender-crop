@@ -15,4 +15,6 @@ public final class ModParticles {
     }
 
     public static final RegistryObject<SimpleParticleType> PARTICLE = PARTICLE_TYPES.register("ender_particles", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> PARTICLE_DEFAULT = PARTICLE_TYPES.register("ender_particles_default", () -> new SimpleParticleType(true));
+
 }

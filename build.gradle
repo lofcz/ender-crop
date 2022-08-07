@@ -2,10 +2,13 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = "https://maven.parchmentmc.org"}
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+
         gradlePluginPortal()
         mavenCentral()
     }
     dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
         classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
         classpath group: "gradle.plugin.com.matthewprenger", name : "CurseGradle", version: "1.4.0"
         classpath group: "org.parchmentmc", name: "librarian", version: "1.+"
@@ -27,8 +30,15 @@ minecraft {
 
     runs {
         client {
-            workingDirectory project.file("run")
-            property "forge.logging.console.level", "debug"
+            properties 'mixin.env.remapRefMap': 'true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            workingDirectory project.file('run')
+            arg "-mixin.config="+archivesBaseName+".mixins.json"
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'endercrop'
+
             mods {
                 endercrop {
                     source sourceSets.main
@@ -37,8 +47,29 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file("run-server")
-            property "forge.logging.console.level", "debug"
+            properties 'mixin.env.remapRefMap': 'true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endercrop.mixins.json"
+
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+
+            mods {
+                endercrop {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
             mods {
                 endercrop {
                     source sourceSets.main
@@ -48,6 +79,8 @@ minecraft {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 repositories {
     maven { url "https://maven.k-4u.nl" }
 }
@@ -55,6 +88,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
     implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.18-5.1.0-8") { transitive = false }
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 jar {
@@ -67,7 +101,8 @@ jar {
                 "Implementation-Title": project.name,
                 "Implementation-Version": getArchiveVersion(),
                 "Implementation-Vendor" :"DrManganese",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "${archivesBaseName}.mixins.json"
         ])
     }
     from "LICENSE"
@@ -83,4 +118,14 @@ curseforge {
         releaseType = "beta"
         mainArtifact jar
     }
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+mixin {
+    debug.verbose = true
+    debug.export = true
+    dumpTargetOnFailure = true
+
+    add sourceSets.main, "${archivesBaseName}.refmap.json"
 }
